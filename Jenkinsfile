@@ -2,6 +2,10 @@ pipeline {
     agent {
         label 'master'
     }
+    triggers {
+        upstream(upstreamProjects: '../Reference/ref_migration',
+                 threshold: hudson.model.Result.SUCCESS)
+    }
     stages {
         stage('Clean') {
             steps {
@@ -30,7 +34,8 @@ pipeline {
                     for (def file : findFiles(glob: 'out/*.csv')) {
                         csvs.add("out/${file.name}")
                     }
-                    uploadDraftset('ONS LTIM Passenger Survey 4.04', obslist)
+                    uploadDraftset('ONS LTIM Passenger Survey 4.04', csvs,
+                                   'https://github.com/ONS-OpenData/ref_migration/raw/master/columns.csv')
                 }
             }
         }
