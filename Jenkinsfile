@@ -30,6 +30,7 @@ pipeline {
                     for (def file : findFiles(glob: 'out/*.csv')) {
                         csvs.add("out/${file.name}")
                     }
+                    jobDraft.replace()
                     uploadDraftset('ONS LTIM Passenger Survey 4.04', csvs,
                                    'https://github.com/ONS-OpenData/ref_migration/raw/master/columns.csv')
                 }
@@ -38,7 +39,7 @@ pipeline {
         stage('Publish') {
             steps {
                 script {
-                    publishDraftset()
+                    jobDraft.publish()
                 }
             }
         }
