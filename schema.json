@@ -41,7 +41,7 @@
           "titles": "Measure Type",
           "name": "measureType",
           "datatype": {
-            "format": "count"
+            "format": "Count"
           }
         }, {
           "titles": "Unit",
