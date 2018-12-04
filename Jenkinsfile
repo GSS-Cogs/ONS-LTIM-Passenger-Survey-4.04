@@ -20,19 +20,29 @@ pipeline {
                 }
             }
             steps {
-                sh "jupyter-nbconvert --output-dir=out --execute '4.04_Migration_data.ipynb'"
+                sh "jupyter-nbconvert --output-dir=out --ExecutePreprocessor.timeout=None --execute 'main.ipynb'"
+            }
+        }
+        stage('Test') {
+            agent {
+                docker {
+                    image 'cloudfluff/csvlint'
+                    reuseNode true
+                }
+            }
+            steps {
+                script {
+                    ansiColor('xterm') {
+                        sh "csvlint -s schema.json"
+                    }
+                }
             }
         }
         stage('Upload draftset') {
             steps {
                 script {
-                    def csvs = []
-                    for (def file : findFiles(glob: 'out/*.csv')) {
-                        csvs.add("out/${file.name}")
-                    }
                     jobDraft.replace()
-                    dataset.delete(util.slugise('ONS LTIM Passenger Survey 4.04'))
-                    uploadTidy(csvs,
+                    uploadTidy(['out/observations.csv'],
                                'https://github.com/ONS-OpenData/ref_migration/raw/master/columns.csv')
                 }
             }
