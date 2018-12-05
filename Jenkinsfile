@@ -59,16 +59,7 @@ pipeline {
         always {
             script {
                 archiveArtifacts 'out/*'
-
-                configFileProvider([configFile(fileId: 'trello', variable: 'configfile')]) {
-                    def config = readJSON(text: readFile(file: configfile))
-                    String data = """{"idValue": "${config['results'][currentBuild.currentResult]}"}"""
-                    def response = httpRequest(contentType: 'APPLICATION_JSON',
-                      httpMode: 'PUT',
-                      url: "https://api.trello.com/1/card/5b4728560fe67f87ff11202b/customField/${config['field']}/item?key=${config['key']}&token=${config['token']}",
-                      requestBody: data
-                    )
-                }
+                updateCard '5b4728560fe67f87ff11202b'
             }
         }
         success {
