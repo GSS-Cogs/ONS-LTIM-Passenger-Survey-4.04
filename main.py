@@ -18,10 +18,10 @@
 # +
 from gssutils import *
 
-scraper = Scraper('https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/' \
-                  'internationalmigration/datasets/ipsareaofdestinationororiginwithintheukbycitizenship')
-scraper
+scraper = Scraper('https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/internationalmigration/datasets/ipsareaofdestinationororiginwithintheukbycitizenship')
 # -
+
+scraper
 
 tabs = scraper.distributions[0].as_databaker()
 
@@ -112,3 +112,5 @@ tidy.to_csv(out / 'observations-alt.csv', index = False)
 csvw.create(out / 'observations-alt.csv', out / 'observations-alt.csv-metadata.json', with_transform=True,
             base_url='http://gss-data.org.uk/data/', base_path='gss_data/migration/ons-ltim-passenger-survey-4-01',
             dataset_metadata=scraper.dataset.as_quads())
+
+
